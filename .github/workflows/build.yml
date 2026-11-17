@@ -1,0 +1,45 @@
+name: Build KOSMOS-66
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libjack-jackd2-dev libx11-dev libxcomposite-dev \
+            libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
+            libfreetype6-dev libfontconfig1-dev libgl1-mesa-dev
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Collect binaries
+        shell: bash
+        run: |
+          mkdir -p dist
+          A=build/Kosmos66_artefacts/Release
+          cp -R "$A/VST3/"*.vst3 dist/
+          if [ -d "$A/AU" ]; then cp -R "$A/AU/"*.component dist/; fi
+          if [ -d "$A/Standalone" ]; then cp -R "$A/Standalone/"* dist/; fi
+          cp README.md dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KOSMOS-66-${{ runner.os }}
+          path: dist
