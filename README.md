@@ -45,7 +45,7 @@ The plugins end up in `build/Kosmos66_artefacts/Release/` under `VST3/`, `AU/` (
 
 If you already have JUCE checked out, add `-DJUCE_DIR=/path/to/JUCE` to the first command.
 
-**Linux packages:** `libasound2-dev libjack-jackd2-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype6-dev libfontconfig1-dev libgl1-mesa-dev`
+**Linux packages:** `libasound2-dev libjack-jackd2-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype6-dev libfontconfig1-dev libgl1-mesa-dev`
 
 **macOS note:** local builds are ad-hoc signed. If you copy a binary built on another Mac, clear quarantine with `xattr -cr KOSMOS-66.vst3`.
 
